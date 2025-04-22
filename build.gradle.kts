@@ -20,7 +20,7 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter:3.4.4")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
 	implementation("org.springframework.boot:spring-boot-starter-web:3.4.4")
 }
 
