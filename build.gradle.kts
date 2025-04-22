@@ -22,6 +22,11 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
 	implementation("org.springframework.boot:spring-boot-starter-web:3.4.4")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.4")
+	implementation("org.postgresql:postgresql:42.7.5")
+	testImplementation("org.assertj:assertj-core:3.27.3")
+	compileOnly("org.projectlombok:lombok:1.18.38")
+	annotationProcessor("org.projectlombok:lombok:1.18.38")
 }
 
 tasks.withType<Test> {
