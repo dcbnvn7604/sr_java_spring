@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,15 +29,23 @@ class AuthApiTests {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@Test
 	void login() {
-		User user = new User("user", "password");
+		User user = new User("user", passwordEncoder.encode("password"));
 		userRepository.save(user);
 		LoginRequest request = new LoginRequest();
 		request.setUsername("user");
 		request.setPassword("password");
-		LoginResponse response = this.restTemplate.postForObject("http://localhost:" + port + "/api/auth/login", request, LoginResponse.class);
-		assertThat(response.getToken()).contains("token");
+		ResponseEntity<LoginResponse> response = this.restTemplate.postForEntity("http://localhost:" + port + "/api/auth/login", request, LoginResponse.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + response.getBody().getToken());
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<String> response1 = this.restTemplate.exchange("http://localhost:" + port + "/api/auth/secure", HttpMethod.GET, entity, String.class);
+		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
 }

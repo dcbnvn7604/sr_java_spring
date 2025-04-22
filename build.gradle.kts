@@ -27,6 +27,10 @@ dependencies {
 	testImplementation("org.assertj:assertj-core:3.27.3")
 	compileOnly("org.projectlombok:lombok:1.18.38")
 	annotationProcessor("org.projectlombok:lombok:1.18.38")
+	implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")
+	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 }
 
 tasks.withType<Test> {

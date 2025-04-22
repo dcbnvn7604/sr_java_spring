@@ -4,10 +4,7 @@ import com.sr.spring.dto.LoginRequest;
 import com.sr.spring.dto.LoginResponse;
 import com.sr.spring.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,4 +17,7 @@ public class AuthApi {
         String token = authService.authen(loginRequest.getUsername(), loginRequest.getPassword());
         return new LoginResponse(token);
     }
+
+    @GetMapping("/secure")
+    public void secure() {}
 }
