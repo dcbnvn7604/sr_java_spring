@@ -1,0 +1,11 @@
+name: sr_java_spring
+
+services:
+  db:
+    image: postgres:16.8-bullseye
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: sr_java_spring
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5435:5432
