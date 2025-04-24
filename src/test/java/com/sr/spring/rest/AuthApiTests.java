@@ -1,5 +1,6 @@
 package com.sr.spring.rest;
 
+import com.sr.spring.dto.ErrorResponse;
 import com.sr.spring.dto.LoginRequest;
 import com.sr.spring.dto.LoginResponse;
 import com.sr.spring.model.User;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,4 +38,10 @@ class AuthApiTests {
 		assertThat(response.getToken()).contains("token");
 	}
 
+	@Test
+	void exception() {
+		ResponseEntity<ErrorResponse> response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/auth/exception", ErrorResponse.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+		assertThat(response.getBody().getMessage()).isEqualTo("Something went wrong");
+	}
 }
