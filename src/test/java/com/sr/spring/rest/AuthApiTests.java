@@ -5,6 +5,8 @@ import com.sr.spring.dto.LoginRequest;
 import com.sr.spring.dto.LoginResponse;
 import com.sr.spring.model.User;
 import com.sr.spring.repository.UserRepository;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,5 +47,48 @@ class AuthApiTests {
 		ResponseEntity<ErrorResponse> response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/auth/exception", ErrorResponse.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 		assertThat(response.getBody().getMessage()).isEqualTo("Something went wrong");
+	}
+
+	@Getter
+	@Setter
+	private class LocalObject {
+		private int number;
+		private String date;
+	}
+
+	@Getter
+	@Setter
+	private class ValidateRequest {
+		private LocalObject object;
+		private String startDate;
+		private String endDate;
+	}
+
+	@Test
+	void validate() {
+		LocalObject object = new LocalObject();
+		object.setNumber(0);
+		object.setDate("2011-01-01");
+		ValidateRequest request = new ValidateRequest();
+		request.setObject(object);
+		request.setStartDate("2011-01-02");
+		request.setEndDate("2011-01-01");
+		ResponseEntity<ErrorResponse> response = this.restTemplate.postForEntity("http://localhost:" + port + "/api/auth/validate", request, ErrorResponse.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		Map<String,String> detail =  response.getBody().getDetail();
+		assertThat(detail.get("object.number")).isEqualTo("greater than 0");
+		assertThat(detail.get("endDate")).isEqualTo("invalid period");
+	}
+
+	@Test
+	void validateInvalidDate() {
+		LocalObject object = new LocalObject();
+		object.setDate("abc");
+		ValidateRequest request = new ValidateRequest();
+		request.setObject(object);
+		ResponseEntity<ErrorResponse> response = this.restTemplate.postForEntity("http://localhost:" + port + "/api/auth/validate", request, ErrorResponse.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		Map<String,String> detail =  response.getBody().getDetail();
+		assertThat(detail.get("object.date")).isEqualTo("invalid format");
 	}
 }

@@ -27,6 +27,9 @@ dependencies {
 	testImplementation("org.assertj:assertj-core:3.27.3")
 	compileOnly("org.projectlombok:lombok:1.18.38")
 	annotationProcessor("org.projectlombok:lombok:1.18.38")
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.4.4")
+	testCompileOnly("org.projectlombok:lombok:1.18.38")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
 }
 
 tasks.withType<Test> {

@@ -1,11 +1,14 @@
 package com.sr.spring.dto;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@RequiredArgsConstructor
+import java.util.Map;
+
+
+@AllArgsConstructor
 @Getter
 public class ErrorResponse {
-    @NonNull private String message;
+    @NonNull
+    private String message;
+    private Map<String, String> detail;
 }
