@@ -4,6 +4,7 @@ import com.sr.spring.dto.LoginRequest;
 import com.sr.spring.dto.LoginResponse;
 import com.sr.spring.model.User;
 import com.sr.spring.repository.UserRepository;
+import com.sr.spring.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,9 @@ class AuthApiTests {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private AuthService authService;
+
 	@Test
 	void login() {
 		User user = new User("user", passwordEncoder.encode("password"));
@@ -48,4 +52,16 @@ class AuthApiTests {
 		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
+	@Test
+	void admin() {
+		User user = new User("user", passwordEncoder.encode("password"));
+		user.setRole("ADMIN");
+		userRepository.save(user);
+		String token = authService.authen("user", "password");
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + token);
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<String> response1 = this.restTemplate.exchange("http://localhost:" + port + "/api/auth/admin", HttpMethod.GET, entity, String.class);
+		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.OK);
+	}
 }

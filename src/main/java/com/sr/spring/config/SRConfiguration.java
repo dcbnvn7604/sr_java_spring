@@ -24,6 +24,7 @@ public class SRConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/health", "/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()).csrf(csrf -> csrf.disable());
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -1,10 +1,7 @@
 package com.sr.spring.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @RequiredArgsConstructor
 @NoArgsConstructor
@@ -20,4 +17,7 @@ public class User {
     @NonNull
     @Getter
     private String password;
+    @Getter
+    @Setter
+    private String role;
 }

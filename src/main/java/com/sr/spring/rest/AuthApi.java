@@ -20,4 +20,7 @@ public class AuthApi {
 
     @GetMapping("/secure")
     public void secure() {}
+
+    @GetMapping("/admin")
+    public void admin() {}
 }
