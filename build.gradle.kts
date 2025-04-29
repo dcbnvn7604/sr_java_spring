@@ -27,6 +27,7 @@ dependencies {
 	testImplementation("org.assertj:assertj-core:3.27.3")
 	compileOnly("org.projectlombok:lombok:1.18.38")
 	annotationProcessor("org.projectlombok:lombok:1.18.38")
+	implementation("org.modelmapper:modelmapper:3.2.2")
 }
 
 tasks.withType<Test> {
