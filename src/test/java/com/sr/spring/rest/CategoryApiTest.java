@@ -1,6 +1,7 @@
 package com.sr.spring.rest;
 
 import com.sr.spring.dto.CategoiesResponse;
+import com.sr.spring.dto.JpqlResponse;
 import com.sr.spring.model.Category;
 import com.sr.spring.model.Product;
 import com.sr.spring.repository.CategoryRepository;
@@ -54,5 +55,30 @@ public class CategoryApiTest {
         lazyResponse = response.getBody();
         assertThat(lazyResponse.getCategories().get(0).getName()).isEqualTo("category1");
         assertThat(lazyResponse.getCategories().get(0).getProducts().get(0).getName()).isEqualTo("product1");
+    }
+
+    @Test
+    void xql() {
+        Product product = new Product(1, "product1", "description11");
+        productRepository.save(product);
+        Category category = new Category(1, "category1", "description12");
+        categoryRepository.save(category);
+        product.addCategory(category);
+        productRepository.save(product);
+        product = new Product(2, "product2", "description21");
+        productRepository.save(product);
+        category = new Category(2, "category2", "description22");
+        categoryRepository.save(category);
+        product.addCategory(category);
+        productRepository.save(product);
+        ResponseEntity<JpqlResponse> response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/categories/jpql", JpqlResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        JpqlResponse jpqlResponse = response.getBody();
+        assertThat(jpqlResponse.getRecords().get(0).getCount()).isEqualTo(1);
+
+        response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/categories/sql", JpqlResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        jpqlResponse = response.getBody();
+        assertThat(jpqlResponse.getRecords().get(0).getCount()).isEqualTo(1);
     }
 }

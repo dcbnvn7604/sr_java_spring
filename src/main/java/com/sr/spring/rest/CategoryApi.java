@@ -1,6 +1,8 @@
 package com.sr.spring.rest;
 
 import com.sr.spring.dto.CategoiesResponse;
+import com.sr.spring.dto.JpqlRecord;
+import com.sr.spring.dto.JpqlResponse;
 import com.sr.spring.model.Category;
 import com.sr.spring.service.CategoryService;
 import lombok.AllArgsConstructor;
@@ -45,5 +47,31 @@ public class CategoryApi {
         List<Category> categories = categoryService.allEager();
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(new Data(categories), CategoiesResponse.class);
+    }
+
+    @GetMapping("/jpql")
+    public JpqlResponse jpql() {
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Getter
+        class Data {
+            private List<JpqlRecord> records;
+        }
+        List<JpqlRecord> records = categoryService.jpql();
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(new Data(records), JpqlResponse.class);
+    }
+
+    @GetMapping("/sql")
+    public JpqlResponse sql() {
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Getter
+        class Data {
+            private List<JpqlRecord> records;
+        }
+        List<JpqlRecord> records = categoryService.sql();
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(new Data(records), JpqlResponse.class);
     }
 }

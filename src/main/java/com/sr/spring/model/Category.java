@@ -6,9 +6,21 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.sr.spring.dto.JpqlRecord;
+
 @NoArgsConstructor
-@Entity
 @Getter
+@Entity
+@SqlResultSetMapping(
+    name = "JpqlRecordMapping",
+    classes = @ConstructorResult(
+        targetClass = JpqlRecord.class,
+        columns = {
+            @ColumnResult(name = "id", type = Long.class),
+            @ColumnResult(name = "count", type = Long.class),
+        }
+    )
+)
 public class Category {
     @Setter
     @Id
