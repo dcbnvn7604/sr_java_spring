@@ -55,4 +55,11 @@ public class CategoryApiTest {
         assertThat(lazyResponse.getCategories().get(0).getName()).isEqualTo("category1");
         assertThat(lazyResponse.getCategories().get(0).getProducts().get(0).getName()).isEqualTo("product1");
     }
+
+    @Test
+    void transaction() {
+        ResponseEntity<String> response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/categories/transaction", String.class);
+        Category category = categoryRepository.findById(1L).orElse(null);
+        assertThat(category).isNull();
+    }
 }

@@ -46,4 +46,9 @@ public class CategoryApi {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(new Data(categories), CategoiesResponse.class);
     }
+
+    @GetMapping("/transaction")
+    public void transaction() {
+        categoryService.transaction();
+    }
 }
