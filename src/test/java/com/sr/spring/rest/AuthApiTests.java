@@ -35,4 +35,9 @@ class AuthApiTests {
 		assertThat(response.getToken()).contains("token");
 	}
 
+	@Test
+	void pagiate() {
+		String response = this.restTemplate.getForObject("http://localhost:" + port + "/api/auth/paginate", String.class);
+		assertThat(response).contains("pageable");
+	}
 }
