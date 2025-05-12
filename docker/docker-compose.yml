@@ -9,3 +9,10 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - 5435:5432
+  queue:
+    image: rabbitmq:3.13.7
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    ports:
+      - 5673:5672

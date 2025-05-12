@@ -3,9 +3,11 @@ package com.sr.spring.service;
 import com.sr.spring.model.User;
 import com.sr.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
+@Profile("rest")
 public class AuthService {
     @Autowired
     private UserRepository userRepository;

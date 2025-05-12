@@ -4,11 +4,13 @@ import com.sr.spring.dto.LoginRequest;
 import com.sr.spring.dto.LoginResponse;
 import com.sr.spring.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Profile("rest")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthApi {

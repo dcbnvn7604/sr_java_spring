@@ -27,6 +27,7 @@ dependencies {
 	testImplementation("org.assertj:assertj-core:3.27.3")
 	compileOnly("org.projectlombok:lombok:1.18.38")
 	annotationProcessor("org.projectlombok:lombok:1.18.38")
+	implementation("org.springframework.boot:spring-boot-starter-amqp:3.4.4")
 }
 
 tasks.withType<Test> {
