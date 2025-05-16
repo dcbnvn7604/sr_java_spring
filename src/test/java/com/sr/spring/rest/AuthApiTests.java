@@ -35,4 +35,8 @@ class AuthApiTests {
 		assertThat(response.getToken()).contains("token");
 	}
 
+	@Test
+	void parallel() {
+		String response = this.restTemplate.getForObject("http://localhost:" + port + "/api/auth/parallel", String.class);
+	}
 }
