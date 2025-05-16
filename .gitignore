@@ -1,0 +1,8 @@
+.gradle
+bin
+build
+
+.idea/*
+!.idea/codeStyles
+!.idea/runConfigurations
+!.idea/vcs.xml
