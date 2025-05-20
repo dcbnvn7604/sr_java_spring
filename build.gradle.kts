@@ -22,6 +22,11 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.4.4")
+	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.4.4")
+	compileOnly("org.projectlombok:lombok:1.18.38")
+	annotationProcessor("org.projectlombok:lombok:1.18.38")
+	implementation("org.postgresql:r2dbc-postgresql:1.0.7.RELEASE")
+	implementation("org.postgresql:postgresql:42.7.5")
 }
 
 tasks.withType<Test> {
