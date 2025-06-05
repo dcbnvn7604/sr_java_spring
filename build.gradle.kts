@@ -27,6 +27,9 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok:1.18.38")
 	implementation("org.postgresql:r2dbc-postgresql:1.0.7.RELEASE")
 	implementation("org.postgresql:postgresql:42.7.5")
+	testCompileOnly("org.projectlombok:lombok:1.18.38")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.4.4")
 }
 
 tasks.withType<Test> {

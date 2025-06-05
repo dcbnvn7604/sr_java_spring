@@ -11,14 +11,13 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.r2dbc.core.DatabaseClient;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.sr.spring.model.User;
 import com.sr.spring.repository.UserRepository;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -65,4 +64,31 @@ class RootApiTests {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isEqualTo("[{\"username\":\"user\",\"password\":\"password\"}]");
 	}
+
+	@Test
+	void validate() {
+		ValidateRequest request = new ValidateRequest();
+		request.setNumber(-1);
+		request.setUsername("testuser");
+		ResponseEntity<String> response = this.restTemplate.postForEntity("http://localhost:" + port + "/validate", request, String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(response.getBody()).contains("greater than 0");
+	}
+
+	@Test
+	void validateUsernameNotExists() {
+		ValidateRequest request = new ValidateRequest();
+		request.setNumber(1);
+		request.setUsername("nonexistentuser");
+		ResponseEntity<String> response = this.restTemplate.postForEntity("http://localhost:" + port + "/validate", request, String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(response.getBody()).contains("Username not exists");
+	}
+}
+
+@Getter
+@Setter
+class ValidateRequest {
+	private int number;
+	private String username;
 }
