@@ -62,6 +62,7 @@ class AuthApiTests {
 		private LocalObject object;
 		private String startDate;
 		private String endDate;
+		private String username;
 	}
 
 	@Test
@@ -73,11 +74,13 @@ class AuthApiTests {
 		request.setObject(object);
 		request.setStartDate("2011-01-02");
 		request.setEndDate("2011-01-01");
+		request.setUsername("user");
 		ResponseEntity<ErrorResponse> response = this.restTemplate.postForEntity("http://localhost:" + port + "/api/auth/validate", request, ErrorResponse.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		Map<String,String> detail =  response.getBody().getDetail();
 		assertThat(detail.get("object.number")).isEqualTo("greater than 0");
 		assertThat(detail.get("endDate")).isEqualTo("invalid period");
+		assertThat(detail.get("username")).isEqualTo("username not exists");
 	}
 
 	@Test
