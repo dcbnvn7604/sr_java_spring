@@ -44,6 +44,11 @@ public class RootApi {
     public Mono<Void> secure() {
         return Mono.empty();
     }
+
+    @GetMapping("/admin")
+    public Mono<Void> admin() {
+        return Mono.empty();
+    }
 }
 
 @Getter

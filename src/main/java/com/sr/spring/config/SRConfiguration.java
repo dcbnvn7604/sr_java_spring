@@ -29,6 +29,7 @@ public class SRConfiguration {
             .securityContextRepository(securityContextRepository)
             .authorizeExchange(exchanges -> exchanges
                 .pathMatchers("/health", "/auth", "/users").permitAll()
+                .pathMatchers("/admin").hasRole("ADMIN")
                 .anyExchange().authenticated()
             )
             .build();

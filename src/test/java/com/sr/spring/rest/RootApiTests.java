@@ -53,7 +53,8 @@ class RootApiTests {
 			CREATE TABLE IF NOT EXISTS "user" (
 				id SERIAL PRIMARY KEY,
 				username VARCHAR(20) NOT NULL,
-				password VARCHAR(60) NOT NULL
+				password VARCHAR(60) NOT NULL,
+				role VARCHAR(20) NOT NULL
 			);
 			""";
 		client.sql(sql)
@@ -68,18 +69,8 @@ class RootApiTests {
 	}
 
 	@Test
-	void users() {
-		User user = new User("user", "password");
-		repository.save(user)
-			.block();
-		ResponseEntity<String> response = this.restTemplate.getForEntity("http://localhost:" + port + "/users", String.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isEqualTo("[{\"username\":\"user\",\"password\":\"password\"}]");
-	}
-
-	@Test
 	void secure() {
-		User user = new User("user", passwordEncoder.encode("password"));
+		User user = new User("user", passwordEncoder.encode("password"), "ROLE_USER");
 		repository.save(user)
 			.block();
 		AuthenRequest request = new AuthenRequest();
@@ -91,6 +82,25 @@ class RootApiTests {
 		headers.set("Authorization", "Bearer " + response.getBody().getToken());
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 		ResponseEntity<String> response1 = this.restTemplate.exchange("http://localhost:" + port + "/secure", HttpMethod.GET, entity, String.class);
+		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.OK);
+		response1 = this.restTemplate.exchange("http://localhost:" + port + "/admin", HttpMethod.GET, entity, String.class);
+		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+	}
+
+	@Test
+	void admin() {
+		User user = new User("admin", passwordEncoder.encode("password"), "ROLE_ADMIN");
+		repository.save(user)
+			.block();
+		AuthenRequest request = new AuthenRequest();
+		request.setUsername("admin");
+		request.setPassword("password");
+		ResponseEntity<AuthenResponse> response = this.restTemplate.postForEntity("http://localhost:" + port + "/auth", request, AuthenResponse.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + response.getBody().getToken());
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<String> response1 = this.restTemplate.exchange("http://localhost:" + port + "/admin", HttpMethod.GET, entity, String.class);
 		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 }

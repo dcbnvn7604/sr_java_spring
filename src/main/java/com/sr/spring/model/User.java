@@ -20,4 +20,7 @@ public class User {
     @NonNull
     @Getter
     private String password;
+    @NonNull
+    @Getter
+    private String role;
 }
