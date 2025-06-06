@@ -27,6 +27,12 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok:1.18.38")
 	implementation("org.postgresql:r2dbc-postgresql:1.0.7.RELEASE")
 	implementation("org.postgresql:postgresql:42.7.5")
+	implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")
+	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+	testCompileOnly("org.projectlombok:lombok:1.18.38")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
 }
 
 tasks.withType<Test> {
