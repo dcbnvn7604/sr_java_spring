@@ -33,26 +33,32 @@ public class CategoryApiTest {
     void all() {
         Product product = new Product(1, "product1", "description11");
         productRepository.save(product);
-        Category category = new Category(1, "category1", "description12");
-        categoryRepository.save(category);
-        product.addCategory(category);
+        Category category1 = new Category(1, "category1", "description12");
+        categoryRepository.save(category1);
+        product.addCategory(category1);
         productRepository.save(product);
         product = new Product(2, "product2", "description21");
         productRepository.save(product);
-        category = new Category(2, "category2", "description22");
-        categoryRepository.save(category);
-        product.addCategory(category);
+        Category category2 = new Category(2, "category2", "description22");
+        categoryRepository.save(category2);
+        product.addCategory(category2);
         productRepository.save(product);
+        product = new Product(3, "product3", "description31");
+        product.addCategory(category1);
+        product.addCategory(category2);
+        productRepository.save(product);
+
         ResponseEntity<CategoiesResponse> response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/categories/lazy", CategoiesResponse.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         CategoiesResponse lazyResponse = response.getBody();
         assertThat(lazyResponse.getCategories().get(0).getName()).isEqualTo("category1");
-        assertThat(lazyResponse.getCategories().get(0).getProducts().get(0).getName()).isEqualTo("product1");
+        assertThat(lazyResponse.getCategories().get(0).getProducts().size()).isEqualTo(2);
 
+        System.out.println("start eager");
         response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/categories/eager", CategoiesResponse.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         lazyResponse = response.getBody();
         assertThat(lazyResponse.getCategories().get(0).getName()).isEqualTo("category1");
-        assertThat(lazyResponse.getCategories().get(0).getProducts().get(0).getName()).isEqualTo("product1");
+        assertThat(lazyResponse.getCategories().get(0).getProducts().size()).isEqualTo(2);
     }
 }
