@@ -57,9 +57,16 @@ public class CategoryApiTest {
     }
 
     @Test
-    void transaction() {
-        ResponseEntity<String> response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/categories/transaction", String.class);
+    void rollback() {
+        ResponseEntity<String> response = this.restTemplate.getForEntity("http://localhost:" + port + "/api/categories/rollback", String.class);
         Category category = categoryRepository.findById(1L).orElse(null);
         assertThat(category).isNull();
+    }
+
+    @Test
+    void transaction() {
+        assertThat(categoryRepository.count()).isEqualTo(0);
+        this.restTemplate.getForEntity("http://localhost:" + port + "/api/categories/transaction", String.class);
+        assertThat(categoryRepository.count()).isEqualTo(1);
     }
 }

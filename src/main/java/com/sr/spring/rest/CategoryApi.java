@@ -47,6 +47,11 @@ public class CategoryApi {
         return modelMapper.map(new Data(categories), CategoiesResponse.class);
     }
 
+    @GetMapping("/rollback")
+    public void rollback() {
+        categoryService.rollback();
+    }
+
     @GetMapping("/transaction")
     public void transaction() {
         categoryService.transaction();

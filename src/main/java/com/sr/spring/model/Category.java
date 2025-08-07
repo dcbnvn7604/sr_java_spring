@@ -9,6 +9,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Getter
+@Setter
 public class Category {
     @Setter
     @Id
