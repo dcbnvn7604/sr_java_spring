@@ -33,4 +33,14 @@ public class RootApi {
     public Flux<SqlRecord> sql() {
         return categoryService.sql();
     }
+
+    @GetMapping("/rollback")
+    public Mono<Void> rollback() {
+        return categoryService.rollback();
+    }
+
+    @GetMapping("/transaction")
+    public Mono<Void> transaction() {
+        return categoryService.transaction();
+    }
 }

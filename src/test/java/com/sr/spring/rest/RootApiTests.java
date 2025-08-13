@@ -1,6 +1,6 @@
 package com.sr.spring.rest;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -11,10 +11,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.r2dbc.core.DatabaseClient;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.sr.spring.model.Category;
@@ -54,7 +52,7 @@ class RootApiTests {
 	@Autowired
 	private ProductCategoryRepository pcRepository;
 
-	@BeforeAll
+	@BeforeEach
 	public void setup() {
 		String sql = """
 			DROP TABLE IF EXISTS "user";
@@ -132,5 +130,27 @@ class RootApiTests {
 		ResponseEntity<String> response = this.restTemplate.getForEntity("http://localhost:" + port + "/sql", String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isEqualTo("[{\"id\":1,\"count\":2}]");
+	}
+
+	@Test
+	void rollback() {
+		long total = cRepository.count()
+			.block();
+		assertThat(total).isEqualTo(0);
+		this.restTemplate.getForEntity("http://localhost:" + port + "/rollback", String.class);
+		total = cRepository.count()
+			.block();
+		assertThat(total).isEqualTo(0);
+	}
+
+	@Test
+	void transaction() {
+		long total = cRepository.count()
+			.block();
+		assertThat(total).isEqualTo(0);
+		this.restTemplate.getForEntity("http://localhost:" + port + "/transaction", String.class);
+		total = cRepository.count()
+			.block();
+		assertThat(total).isEqualTo(1);
 	}
 }
