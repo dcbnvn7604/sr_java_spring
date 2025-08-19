@@ -24,4 +24,19 @@ public class RootApi {
     public Flux<User> users() {
         return service.findAll();
     }
+
+    @GetMapping("/parallel")
+    public Mono<Void> parallel() {
+        return service.parallel();
+    }
+
+    @GetMapping("/parallel_io")
+    public Mono<Void> parallelIo() {
+        return service.parallelIo();
+    }
+
+    @GetMapping("/parallel_cpu")
+    public Mono<Void> parallelCpu() {
+        return service.parallelCpu();
+    }
 }

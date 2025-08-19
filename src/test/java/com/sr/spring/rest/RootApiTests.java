@@ -65,4 +65,14 @@ class RootApiTests {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isEqualTo("[{\"username\":\"user\",\"password\":\"password\"}]");
 	}
+
+	@Test
+	void parallel() {
+		ResponseEntity<Void> response = this.restTemplate.getForEntity("http://localhost:" + port + "/parallel", Void.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		response = this.restTemplate.getForEntity("http://localhost:" + port + "/parallel_io", Void.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		response = this.restTemplate.getForEntity("http://localhost:" + port + "/parallel_cpu", Void.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+	}
 }
